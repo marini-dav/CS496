@@ -30,6 +30,7 @@ class SlipHandler(webapp2.RequestHandler):
 				self.response.write(json.dumps(slip_dict))
 			else:
 				self.response.set_status(400)
+				return
 		else:
 			self.response.set_status(400)
 	
@@ -42,6 +43,7 @@ class SlipHandler(webapp2.RequestHandler):
 				self.response.write(json.dumps(slip_dict))
 			else:
 				self.response.set_status(404)
+				return
 		else:
 			query = Slip.query().fetch()
 			slip_array = []
@@ -68,6 +70,7 @@ class SlipHandler(webapp2.RequestHandler):
 				slip.key.delete()
 			else:
 				self.response.set_status(404)
+				return
 		else:
 			self.response.set_status(404)
 	
@@ -81,18 +84,20 @@ class SlipHandler(webapp2.RequestHandler):
 						slip.number = slip_data['number']
 					else:
 						self.response.set_status(400)
-				if  'current_boat' in slip_data:
+						return
+				if 'current_boat' in slip_data:
 					if slip.current_boat:
 						old_boat_key = slip.current_boat
 						old_boat = ndb.Key(urlsafe=old_boat_key).get()
 						old_boat.at_sea = True
 						old_boat.put()
 					slip.current_boat = slip_data['current_boat']
-				if slip_data['arrival_date']:
+				if 'arrival_date' in slip_data:
 					slip.arrival_date = slip_data['arrival_date']
 				slip.put()
 			else:
 				self.response.set_status(404)
+				return
 		else:
 			self.response.set_status(404)
 	
@@ -122,10 +127,13 @@ class SlipHandler(webapp2.RequestHandler):
 							slip.put()
 					else:
 						self.response.set_status(404)
+						return
 				else:
 					self.response.set_status(400)
+					return
 			else:
 				self.response.set_status(400)
+				return
 		else:
 			self.response.set_status(404)
 
@@ -151,6 +159,7 @@ class BoatHandler(webapp2.RequestHandler):
 				self.response.write(json.dumps(boat_dict))
 			else:
 				self.response.set_status(400)
+				return
 		else:
 			self.response.set_status(400)
 	
@@ -163,6 +172,7 @@ class BoatHandler(webapp2.RequestHandler):
 				self.response.write(json.dumps(boat_dict))
 			else:
 				self.response.set_status(404)
+				return
 		else:
 			query = Boat.query().fetch()
 			boat_array = []
@@ -191,6 +201,7 @@ class BoatHandler(webapp2.RequestHandler):
 				boat.key.delete()
 			else:
 				self.response.set_status(404)
+				return
 		else:
 			self.response.set_status(404)
 	
@@ -204,6 +215,7 @@ class BoatHandler(webapp2.RequestHandler):
 						boat.name = boat_data['name']
 					else:
 						self.response.set_status(400)
+						return
 				if  'type' in boat_data:
 					boat.type = boat_data['type']
 				if 'length' in boat_data:
@@ -211,6 +223,7 @@ class BoatHandler(webapp2.RequestHandler):
 				boat.put()
 			else:
 				self.response.set_status(404)
+				return
 		else:
 			self.response.set_status(404)
 	
@@ -225,6 +238,7 @@ class BoatHandler(webapp2.RequestHandler):
 							boat.name = boat_data['name']
 						else:
 							self.response.set_status(400)
+							return
 						if 'type' in boat_data:
 							boat.type = boat_data['type']
 						else:
@@ -236,10 +250,13 @@ class BoatHandler(webapp2.RequestHandler):
 						boat.put()
 					else:
 						self.response.set_status(404)
+						return
 				else:
 					self.response.set_status(400)
+					return
 			else:
 				self.response.set_status(400)
+				return
 		else:
 			self.response.set_status(404)
 
@@ -254,6 +271,7 @@ class SlipHandler2(webapp2.RequestHandler):
 				self.response.write(json.dumps(boat_dict))
 			else:
 				self.response.set_status(404)
+				return
 		else:
 			self.response.set_status(404)
 	
@@ -263,6 +281,7 @@ class SlipHandler2(webapp2.RequestHandler):
 			if slip:
 				if slip.current_boat:
 					self.response.set_status(400)
+					return
 				else:
 					slip_data = json.loads(self.request.body)
 					if 'id' in slip_data and 'arrival_date' in slip_data:
@@ -274,8 +293,10 @@ class SlipHandler2(webapp2.RequestHandler):
 						boat.put()
 					else:
 						self.response.set_status(400)
+						return
 			else:
 				self.response.set_status(404)
+				return
 		else:
 			self.response.set_status(404)
 	
@@ -298,8 +319,10 @@ class SlipHandler2(webapp2.RequestHandler):
 					slip.put()
 				else:
 					self.response.set_status(404)
+					return
 			else:
 				self.response.set_status(404)
+				return
 		else:
 			self.response.set_status(404)
 
