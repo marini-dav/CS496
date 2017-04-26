@@ -19,14 +19,17 @@ class Boat(ndb.Model):
 class SlipHandler(webapp2.RequestHandler):
 	def post(self):
 		slip_data = json.loads(self.request.body)
-		if 'number' in slip_data:# and not Slip.query(Slip.number == slip_data['number']):
-			new_slip = Slip(number=slip_data['number'], current_boat=None, arrival_date=None, departure_history=[])
-			new_slip.put()
-			new_slip.id = new_slip.key.urlsafe()
-			new_slip.put()
-			slip_dict = new_slip.to_dict()
-			slip_dict['self'] = "/slips/" + new_slip.id
-			self.response.write(json.dumps(slip_dict))
+		if 'number' in slip_data:
+			if slip_data['number']:
+				new_slip = Slip(number=slip_data['number'], current_boat=None, arrival_date=None, departure_history=[])
+				new_slip.put()
+				new_slip.id = new_slip.key.urlsafe()
+				new_slip.put()
+				slip_dict = new_slip.to_dict()
+				slip_dict['self'] = "/slips/" + new_slip.id
+				self.response.write(json.dumps(slip_dict))
+			else:
+				self.response.set_status(400)
 		else:
 			self.response.set_status(400)
 	
@@ -129,22 +132,25 @@ class SlipHandler(webapp2.RequestHandler):
 class BoatHandler(webapp2.RequestHandler):
 	def post(self):
 		boat_data = json.loads(self.request.body)
-		if 'name' in boat_data:# and not Boat.query(Boat.name == boat_data['name']):
-			new_boat = Boat(name=boat_data['name'], at_sea=True)
-			if 'type' in boat_data:
-				new_boat.type = boat_data['type']
+		if 'name' in boat_data:
+			if boat_data['name']:
+				new_boat = Boat(name=boat_data['name'], at_sea=True)
+				if 'type' in boat_data:
+					new_boat.type = boat_data['type']
+				else:
+					new_boat.type = None
+				if 'length' in boat_data:
+					new_boat.length = boat_data['length']
+				else:
+					new_boat.length = None
+				new_boat.put()
+				new_boat.id = new_boat.key.urlsafe()
+				new_boat.put()
+				boat_dict = new_boat.to_dict()
+				boat_dict['self'] = "/boats/" + new_boat.id
+				self.response.write(json.dumps(boat_dict))
 			else:
-				new_boat.type = None
-			if 'length' in boat_data:
-				new_boat.length = boat_data['length']
-			else:
-				new_boat.length = None
-			new_boat.put()
-			new_boat.id = new_boat.key.urlsafe()
-			new_boat.put()
-			boat_dict = new_boat.to_dict()
-			boat_dict['self'] = "/boats/" + new_boat.id
-			self.response.write(json.dumps(boat_dict))
+				self.response.set_status(400)
 		else:
 			self.response.set_status(400)
 	
