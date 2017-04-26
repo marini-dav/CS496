@@ -88,9 +88,6 @@ class SlipHandler(webapp2.RequestHandler):
 				if slip_data['arrival_date']:
 					slip.arrival_date = slip_data['arrival_date']
 				slip.put()
-				slip_dict = new_slip.to_dict()
-				slip_dict['self'] = "/slips/" + new_slip.id
-				self.response.write(json.dumps(slip_dict))
 			else:
 				self.response.set_status(404)
 		else:
@@ -119,9 +116,6 @@ class SlipHandler(webapp2.RequestHandler):
 						slip.number = slip_data['number']
 						slip.departure_history = []
 						slip.put()
-						slip_dict = new_slip.to_dict()
-						slip_dict['self'] = "/slips/" + new_slip.id
-						self.response.write(json.dumps(slip_dict))
 				else:
 					self.response.set_status(400)
 			else:
@@ -206,9 +200,6 @@ class BoatHandler(webapp2.RequestHandler):
 				if 'length' in boat_data:
 					boat.length = boat_data['length']
 				boat.put()
-				boat_dict = new_boat.to_dict()
-				boat_dict['self'] = "/boats/" + new_boat.id
-				self.response.write(json.dumps(boat_dict))
 			else:
 				self.response.set_status(404)
 		else:
@@ -232,9 +223,6 @@ class BoatHandler(webapp2.RequestHandler):
 				else:
 					boat.length = None
 				boat.put()
-				boat_dict = new_boat.to_dict()
-				boat_dict['self'] = "/boats/" + new_boat.id
-				self.response.write(json.dumps(boat_dict))
 			else:
 				self.response.set_status(404)
 		else:
