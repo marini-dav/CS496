@@ -95,31 +95,34 @@ class SlipHandler(webapp2.RequestHandler):
 	
 	def put(self, id=None):
 		if id:
-			slip = ndb.Key(urlsafe=id).get()
-			if slip:
-				slip_data = json.loads(self.request.body)
-				if 'number' in slip_data:
-					if ('arrival_date' in slip_data and not 'current_boat' in slip_data) or (not 'arrival_date' in slip_data and 'current_boat' in slip_data):
-						self.reponse.set_status(400)
-					else:
-						if slip.current_boat:
-							old_boat_key = slip.current_boat
-							old_boat = ndb.Key(urlsafe=old_boat_key).get()
-							old_boat.at_sea = True
-							old_boat.put()
-						if 'arrival_date' in slip_data and 'current_boat' in slip_data:
-							slip.arrival_date = slip_data['arrival_date']
-							slip.current_boat = slip_data['current_boat']
+			slip_data = json.loads(self.request.body)
+			if 'number' in slip_data:
+				if slip_data['number']:
+					slip = ndb.Key(urlsafe=id).get()
+					if slip:
+						if ('arrival_date' in slip_data and not 'current_boat' in slip_data) or (not 'arrival_date' in slip_data and 'current_boat' in slip_data):
+							self.reponse.set_status(400)
 						else:
-							slip.arrival_date = None
-							slip.current_boat = None
-						slip.number = slip_data['number']
-						slip.departure_history = []
-						slip.put()
+							if slip.current_boat:
+								old_boat_key = slip.current_boat
+								old_boat = ndb.Key(urlsafe=old_boat_key).get()
+								old_boat.at_sea = True
+								old_boat.put()
+							if 'arrival_date' in slip_data and 'current_boat' in slip_data:
+								slip.arrival_date = slip_data['arrival_date']
+								slip.current_boat = slip_data['current_boat']
+							else:
+								slip.arrival_date = None
+								slip.current_boat = None
+							slip.number = slip_data['number']
+							slip.departure_history = []
+							slip.put()
+					else:
+						self.response.set_status(404)
 				else:
 					self.response.set_status(400)
 			else:
-				self.response.set_status(404)
+				self.response.set_status(400)
 		else:
 			self.response.set_status(404)
 
@@ -207,24 +210,30 @@ class BoatHandler(webapp2.RequestHandler):
 	
 	def put(self, id=None):
 		if id:
-			boat = ndb.Key(urlsafe=id).get()
-			if boat:
-				boat_data = json.loads(self.request.body)
-				if 'name' in boat_data:
-					boat.name = boat_data['name']
+			boat_data = json.loads(self.request.body)
+			if 'name' in boat_data:
+				if boat_data['name']:
+					boat = ndb.Key(urlsafe=id).get()
+					if boat:
+						if 'name' in boat_data:
+							boat.name = boat_data['name']
+						else:
+							self.response.set_status(400)
+						if 'type' in boat_data:
+							boat.type = boat_data['type']
+						else:
+							boat.type = None
+						if 'length' in boat_data:
+							boat.length = boat_data['length']
+						else:
+							boat.length = None
+						boat.put()
+					else:
+						self.response.set_status(404)
 				else:
 					self.response.set_status(400)
-				if 'type' in boat_data:
-					boat.type = boat_data['type']
-				else:
-					boat.type = None
-				if 'length' in boat_data:
-					boat.length = boat_data['length']
-				else:
-					boat.length = None
-				boat.put()
 			else:
-				self.response.set_status(404)
+				self.response.set_status(400)
 		else:
 			self.response.set_status(404)
 
