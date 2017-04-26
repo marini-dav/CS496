@@ -40,8 +40,18 @@ class SlipHandler(webapp2.RequestHandler):
 			else:
 				self.response.set_status(404)
 		else:
-			slips = Slip.query().fetch()
-			self.response.write(slips)
+			query = Slip.query().fetch()
+			slip_array = []
+			for slip in query:
+				current = {}
+				current['id'] = slip.id
+				current['number'] = slip.number
+				current['current_boat'] = slip.current_boat
+				current['arrival_date'] = slip.arrival_date
+				current['self'] = '/slips/' + slip.id
+				slip_array.append(current)
+				
+			self.response.write(json.dumps(slip_array))
 	
 	def delete(self, id=None):
 		if id:
@@ -142,8 +152,19 @@ class BoatHandler(webapp2.RequestHandler):
 			else:
 				self.response.set_status(404)
 		else:
-			boats = Boat.query().fetch()
-			self.response.write(boats)
+			query = Boat.query().fetch()
+			boat_array = []
+			for boat in query:
+				current = {}
+				current['id'] = boat.id
+				current['name'] = boat.name
+				current['type'] = boat.type
+				current['length'] = boat.length
+				current['at_sea'] = boat.at_sea
+				current['self'] = '/boats/' + boat.id
+				boat_array.append(current)
+				
+			self.response.write(json.dumps(boat_array))
 	
 	def delete(self, id=None):
 		if id:
