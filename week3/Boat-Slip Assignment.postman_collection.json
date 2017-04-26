@@ -1,0 +1,888 @@
+{
+	"variables": [],
+	"info": {
+		"name": "Boat/Slip Assignment",
+		"_postman_id": "444835f3-655c-5f80-6104-2f12a191926f",
+		"description": "Creating a REST API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Create Invalid Boat",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"invalid boat 400\"] = responseCode.code === 400;"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "{{URL}}/boats",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"length\":40\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Create Invalid Slip",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"invalid slip 400\"] = responseCode.code === 400;"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "{{URL}}/slips",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Create Boat",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"ship created code 200\"] = responseCode.code === 200;",
+							"",
+							"body = JSON.parse(responseBody);",
+							"",
+							"postman.setEnvironmentVariable(\"boat_id\",body.id);",
+							"tests[\"new boat is at sea\"] = body.at_sea;",
+							"tests[\"new boat has correct name\"] = body.name === \"Sea Witch\";",
+							"tests[\"new boat has correct type\"] = body.type === \"Catamaran\";",
+							"tests[\"new boat has correct length\"] = body.length === 28;"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "{{URL}}/boats",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\t\"name\": \"Sea Witch\",\r\n\t\"type\":\"Catamaran\",\r\n\t\"length\":28\r\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Modify Boat",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"ship modified code 200\"] = responseCode.code === 200;"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "{{URL}}/boats/{{boat_id}}",
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"id\":\"{{boat_id}}\",\n\t\"length\":30\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Get Boat",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"ship get code 200\"] = responseCode.code === 200;",
+							"",
+							"body = JSON.parse(responseBody);",
+							"tests[\"boat length changed\"] = body.length === 30;",
+							"tests[\"modified boat is at sea\"] = body.at_sea;",
+							"tests[\"modified boat has correct name\"] = body.name === \"Sea Witch\";",
+							"tests[\"modified boat has correct type\"] = body.type === \"Catamaran\";"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "{{URL}}/boats/{{boat_id}}",
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Replace Boat",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"ship replaced code 200\"] = responseCode.code === 200;"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "{{URL}}/boats/{{boat_id}}",
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"id\":\"{{boat_id}}\",\n\t\"name\": \"Sea Worlock\",\n\t\"type\":\"Yacht\",\n\t\"length\":50\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Get Boat",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"boat get code 200\"] = responseCode.code === 200;",
+							"",
+							"body = JSON.parse(responseBody);",
+							"tests[\"boat name changed\"] = body.name === \"Sea Worlock\";",
+							"tests[\"boat type changed\"] = body.type === \"Yacht\";",
+							"tests[\"boat length changed\"] = body.length === 50;",
+							"tests[\"boat is at sea\"] = body.at_sea;"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "{{URL}}/boats/{{boat_id}}",
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Create Slip",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"slip created code 200\"] = responseCode.code === 200;",
+							"",
+							"body = JSON.parse(responseBody);",
+							"",
+							"postman.setEnvironmentVariable(\"slip_id\",body.id);",
+							"tests[\"new slip is empty\"] = body.current_boat === null;",
+							"tests[\"new slip has no arrival date\"] = body.arrival_date === null;",
+							"tests[\"new slip number is correct\"] = body.number === 1;"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "{{URL}}/slips",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"number\":1\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Get Slip Contents",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"slip empty code 404\"] = responseCode.code === 404;"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "{{URL}}/slips/{{slip_id}}/boat",
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Get All Boats",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"get all boats code is 200\"] = responseCode.code === 200;",
+							"",
+							"tests[\"containts boat in collection\"] = responseBody.has(environment.boat_id);"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "{{URL}}/boats",
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Get All Slips",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"get all slips code is 200\"] = responseCode.code === 200;",
+							"",
+							"tests[\"containts slip in collection\"] = responseBody.has(environment.slip_id);"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "{{URL}}/slips",
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Put Boat in Slip",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 200\"] = responseCode.code === 200;"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "{{URL}}/slips/{{slip_id}}/boat",
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"id\":\"{{boat_id}}\",\n\t\"arrival_date\":\"{{date1}}\"\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Get Slip Contents",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"slip occupied code 200\"] = responseCode.code === 200;",
+							"",
+							"body = JSON.parse(responseBody);",
+							"tests[\"correct boat in slip\"] = body.id === environment.boat_id;",
+							""
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "{{URL}}/slips/{{slip_id}}/boat",
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Get Slip",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"slip get code 200\"] = responseCode.code === 200;",
+							"",
+							"body = JSON.parse(responseBody);",
+							"tests[\"new slip has correct boat\"] = body.current_boat === environment.boat_id;",
+							"tests[\"new slip has correct arrival date\"] = body.arrival_date === environment.date1;",
+							""
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "{{URL}}/slips/{{slip_id}}",
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Modify Slip",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"slip modified code 200\"] = responseCode.code === 200;"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "{{URL}}/slips/{{slip_id}}",
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"id\":\"{{boat_id}}\",\n\t\"arrival_date\":\"{{date2}}\"\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Get Slip",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"slip get code 200\"] = responseCode.code === 200;",
+							"",
+							"body = JSON.parse(responseBody);",
+							"tests[\"new slip has correct boat\"] = body.current_boat === environment.boat_id;",
+							"tests[\"new slip has correct arrival date\"] = body.arrival_date === environment.date2;",
+							""
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "{{URL}}/slips/{{slip_id}}",
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Replace Slip",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"slip replaced code 200\"] = responseCode.code === 200;"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "{{URL}}/slips/{{slip_id}}",
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"number\":2\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Get Slip",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"slip get code 200\"] = responseCode.code === 200;",
+							"",
+							"body = JSON.parse(responseBody);",
+							"tests[\"new slip is empty\"] = body.current_boat === null;",
+							"tests[\"new slip has no arrival date\"] = body.arrival_date === null;",
+							""
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "{{URL}}/slips/{{slip_id}}",
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Put Boat in Slip",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 200\"] = responseCode.code === 200;"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "{{URL}}/slips/{{slip_id}}/boat",
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"id\":\"{{boat_id}}\",\n\t\"arrival_date\":\"{{date1}}\"\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Set Boat to Sea",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 200\"] = responseCode.code === 200;"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "{{URL}}/slips/{{slip_id}}/boat",
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"departure_date\":\"{{date4}}\"\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Put Boat in Slip",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 200\"] = responseCode.code === 200;"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "{{URL}}/slips/{{slip_id}}/boat",
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"id\":\"{{boat_id}}\",\n\t\"arrival_date\":\"{{date1}}\"\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Boat",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"ship deleted code 200\"] = responseCode.code === 200;"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "{{URL}}/boats/{{boat_id}}",
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Get Boat",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"boat get code 404\"] = responseCode.code === 404;"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "{{URL}}/boats/{{boat_id}}",
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Get Slip",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"slip get code 200\"] = responseCode.code === 200;",
+							"",
+							"body = JSON.parse(responseBody);",
+							"tests['slip is empty'] = body.current_boat === null;",
+							"tests['slip has no date'] = body.arrival_date === null;",
+							"d_hist = JSON.parse(body.departure_history);",
+							"tests['slip has departure history'] = d_hist.departure_date === environment.date4;"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "{{URL}}/slips/{{slip_id}}",
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Create Boat",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"ship created code 200\"] = responseCode.code === 200;",
+							"",
+							"body = JSON.parse(responseBody);",
+							"",
+							"postman.setEnvironmentVariable(\"boat_id\",body.id);",
+							"tests[\"new boat is at sea\"] = body.at_sea;"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "{{URL}}/boats",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\t\"name\": \"Sea Witch\",\r\n\t\"type\":\"Catamaran\",\r\n\t\"length\":28\r\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Put Boat in Slip",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 200\"] = responseCode.code === 200;"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "{{URL}}/slips/{{slip_id}}/boat",
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"id\":\"{{boat_id}}\",\n\t\"arrival_date\":\"{{date1}}\"\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Slip",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"slip deleted code 200\"] = responseCode.code === 200;"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "{{URL}}/slips/{{slip_id}}",
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Get Slip",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"slip get code 404\"] = responseCode.code === 404;"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "{{URL}}/slips/{{slip_id}}",
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Get Boat",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"boat get code 200\"] = responseCode.code === 200;",
+							"",
+							"body = JSON.parse(responseBody);",
+							"tests['boat is at sea'] = body.at_sea;"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "{{URL}}/boats/{{boat_id}}",
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Boat",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"ship deleted code 200\"] = responseCode.code === 200;"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "{{URL}}/boats/{{boat_id}}",
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"description": ""
+			},
+			"response": []
+		}
+	]
+}
