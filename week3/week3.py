@@ -77,7 +77,10 @@ class SlipHandler(webapp2.RequestHandler):
 			if slip:
 				slip_data = json.loads(self.request.body)
 				if 'number' in slip_data:
-					slip.number = slip_data['number']
+					if slip_data['number']:
+						slip.number = slip_data['number']
+					else:
+						self.response.set_status(400)
 				if  'current_boat' in slip_data:
 					if slip.current_boat:
 						old_boat_key = slip.current_boat
@@ -197,7 +200,10 @@ class BoatHandler(webapp2.RequestHandler):
 			if boat:
 				boat_data = json.loads(self.request.body)
 				if 'name' in boat_data:
-					boat.name = boat_data['name']
+					if boat_data['name']:
+						boat.name = boat_data['name']
+					else:
+						self.response.set_status(400)
 				if  'type' in boat_data:
 					boat.type = boat_data['type']
 				if 'length' in boat_data:
