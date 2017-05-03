@@ -37,12 +37,17 @@ class CallbackHandler(webapp2.RequestHandler):
 		}
 		
 		template = JINJA_ENVIRONMENT.get_template('index.html')
-		self.response.write(template.render(values))
+		self.response.write(template.render(template_values))
 
 class MainPage(webapp2.RequestHandler):
 	def get(self):
+		url = "https://accounts.google.com/o/oauth2/v2/auth"
+		template_values = {
+			'url': url
+		}
+		
 		template = JINJA_ENVIRONMENT.get_template('index.html')
-		self.response.write(template.render())
+		self.response.write(template.render(template_values))
 
 allowed_methods = webapp2.WSGIApplication.allowed_methods
 new_allowed_methods = allowed_methods.union(('PATCH',))
