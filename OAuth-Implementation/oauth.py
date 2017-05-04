@@ -34,12 +34,12 @@ class CallbackHandler(webapp2.RequestHandler):
 		'client_id': CLIENT_ID,
 		'client_secret': CLIENT_SECRET,
 		'redirect_uri': REDIRECT_URL}
-		result = urlfetch.fetch(url='https://www.googleapis.com/oauth2/v4/token', payload = json.dumps(payload), method=urlfetch.POST)
+		result = json.loads(urlfetch.fetch(url='https://www.googleapis.com/oauth2/v4/token', payload = json.dumps(payload), method=urlfetch.POST).content)
 		
-		auth_key = "Bearer " + result.content.access_token
+		auth_key = "Bearer " + result['access_token']
 		
 		payload = {'Authorization': auth_key}
-		response = urlfetch.fetch(url='https://www.googleapis.com/plus/v1/people/me', payload = json.dumps(payload), method=urlfetch.GET)
+		response = json.loads(urlfetch.fetch(url='https://www.googleapis.com/plus/v1/people/me', payload = json.dumps(payload), method=urlfetch.GET).content)
 		
 		template_values = {
 			'name': response.displayName,
