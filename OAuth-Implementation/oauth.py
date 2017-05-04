@@ -36,7 +36,8 @@ class CallbackHandler(webapp2.RequestHandler):
 		'redirect_uri': REDIRECT_URL}
 		result = urlfetch.fetch(url='https://www.googleapis.com/oauth2/v4/token', payload = json.dumps(payload), method=urlfetch.POST)
 		self.response.write(repr(result.content))
-		auth_key = "Bearer " + result['access_token']
+		
+		"""auth_key = "Bearer " + result.content['access_token']
 		
 		payload = {'Authorization': auth_key}
 		response = json.loads(urlfetch.fetch(url='https://www.googleapis.com/plus/v1/people/me', payload = json.dumps(payload), method=urlfetch.GET).content)
@@ -48,7 +49,7 @@ class CallbackHandler(webapp2.RequestHandler):
 		}
 		
 		template = JINJA_ENVIRONMENT.get_template('callback.html')
-		self.response.write(template.render(template_values))
+		self.response.write(template.render(template_values))"""
 
 class MainPage(webapp2.RequestHandler):
 	def get(self):
