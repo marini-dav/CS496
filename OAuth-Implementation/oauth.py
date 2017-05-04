@@ -43,8 +43,10 @@ class CallbackHandler(webapp2.RequestHandler):
 		
 		auth_key = "Bearer " + r['access_token']
 		
-		payload = {'Authorization': auth_key}
-		response = urlfetch.fetch(url='https://www.googleapis.com/plus/v1/people/me', headers=headers, payload=urllib.urlencode(payload), method=urlfetch.GET)
+		headers = {
+			'Authorization': auth_key
+		}
+		response = urlfetch.fetch(url='https://www.googleapis.com/plus/v1/people/me', headers=headers, method=urlfetch.GET)
 		r = json.loads(response.content)
 		self.response.write(r)
 		"""template_values = {
