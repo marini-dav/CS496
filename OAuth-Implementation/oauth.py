@@ -5,6 +5,7 @@ REDIRECT_URL = "https://oauthimplementation-166521.appspot.com/callback"
 state = ""
 
 import os
+import httplib, urllib
 from google.appengine.api import urlfetch
 from google.appengine.api import users
 from google.appengine.ext import ndb
