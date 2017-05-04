@@ -34,8 +34,8 @@ class CallbackHandler(webapp2.RequestHandler):
 		'client_id': CLIENT_ID,
 		'client_secret': CLIENT_SECRET,
 		'redirect_uri': REDIRECT_URL}
-		result = json.loads(urlfetch.fetch(url='https://www.googleapis.com/oauth2/v4/token', payload = json.dumps(payload), method=urlfetch.POST).content)
-		
+		result = urlfetch.fetch(url='https://www.googleapis.com/oauth2/v4/token', payload = json.dumps(payload), method=urlfetch.POST)
+		self.response.write(repr(result.content))
 		auth_key = "Bearer " + result['access_token']
 		
 		payload = {'Authorization': auth_key}
