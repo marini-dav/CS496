@@ -2,7 +2,6 @@ CLIENT_ID = "822545719705-ai33lpgvdtj7o069r4krikae6s20r663.apps.googleuserconten
 CLIENT_SECRET = "XjwySGyHwuhOvAKkGMAPtZ_z"
 GOOGLE_URL = "https://accounts.google.com/o/oauth2/v2/auth"
 REDIRECT_URL = "https://oauthimplementation-166521.appspot.com/callback"
-state = ""
 
 import os
 import httplib, urllib
@@ -19,6 +18,9 @@ JINJA_ENVIRONMENT = jinja2.Environment(
     extensions=['jinja2.ext.autoescape'],
     autoescape=True)
 
+class State(ndb.Model):
+	value = ndb.StringProperty(required=True)
+
 def generate_state(length=10, chars=string.ascii_uppercase + string.digits):
 	return ''.join(random.choice(chars) for _ in range(length))
 
@@ -27,8 +29,12 @@ class CallbackHandler(webapp2.RequestHandler):
 		state_return = self.request.get('state')
 		code = self.request.get('code')
 		
-		#if state_return != state:
-			
+		query = State.query(State.value == state_return)
+		current_state = query.get()
+		if state_return != current_state.value:
+			template = JINJA_ENVIRONMENT.get_template('failure.html')
+			self.response.write(template.render(template_values))
+			return
 		
 		headers = {
 			'Content-Type': 'application/x-www-form-urlencoded'
@@ -50,7 +56,9 @@ class CallbackHandler(webapp2.RequestHandler):
 		r = json.loads(response.content)
 		
 		template_values = {
-			'name': r['displayName'],
+			'displayName': r['displayName'],
+			'familyName': r['familyName'],
+			'givenName': r['givenName'],
 			'url': r['url'],
 			'state': state_return
 		}
@@ -61,6 +69,8 @@ class CallbackHandler(webapp2.RequestHandler):
 class MainPage(webapp2.RequestHandler):
 	def get(self):
 		state = generate_state()
+		new_state = State(value=state)
+		new_state.put()
 		url = GOOGLE_URL + "?response_type=code&client_id=" + CLIENT_ID + "&redirect_uri=" + REDIRECT_URL + "&scope=email&state=" + state
 		template_values = {
 			'url': url
