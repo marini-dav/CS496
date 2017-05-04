@@ -35,6 +35,7 @@ class CallbackHandler(webapp2.RequestHandler):
 			template = JINJA_ENVIRONMENT.get_template('failure.html')
 			self.response.write(template.render())
 			return
+		current_state.key.delete()
 		
 		headers = {
 			'Content-Type': 'application/x-www-form-urlencoded'
