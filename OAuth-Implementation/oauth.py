@@ -52,7 +52,7 @@ class CallbackHandler(webapp2.RequestHandler):
 		template_values = {
 			'name': r['displayName'],
 			'url': r['url'],
-			'state': state
+			'state': state_return
 		}
 		
 		template = JINJA_ENVIRONMENT.get_template('callback.html')
