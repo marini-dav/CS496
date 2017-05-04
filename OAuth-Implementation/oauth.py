@@ -54,7 +54,7 @@ class CallbackHandler(webapp2.RequestHandler):
 		}
 		response = urlfetch.fetch(url='https://www.googleapis.com/plus/v1/people/me', headers=headers, method=urlfetch.GET)
 		r = json.loads(response.content)
-		r_name = json.loads(r['name'])
+		r_name = r['name']
 		
 		template_values = {
 			'displayName': r['displayName'],
