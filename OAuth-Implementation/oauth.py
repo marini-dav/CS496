@@ -33,7 +33,7 @@ class CallbackHandler(webapp2.RequestHandler):
 		current_state = query.get()
 		if state_return != current_state.value:
 			template = JINJA_ENVIRONMENT.get_template('failure.html')
-			self.response.write(template.render(template_values))
+			self.response.write(template.render())
 			return
 		
 		headers = {
