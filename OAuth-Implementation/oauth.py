@@ -46,15 +46,15 @@ class CallbackHandler(webapp2.RequestHandler):
 		payload = {'Authorization': auth_key}
 		response = urlfetch.fetch(url='https://www.googleapis.com/plus/v1/people/me', headers=headers, payload=urllib.urlencode(payload), method=urlfetch.GET)
 		r = json.loads(response.content)
-		
-		template_values = {
+		self.response.write(r)
+		"""template_values = {
 			'name': r['displayName'],
 			'url': r['url'],
 			'state': state
 		}
 		
 		template = JINJA_ENVIRONMENT.get_template('callback.html')
-		self.response.write(template.render(template_values))
+		self.response.write(template.render(template_values))"""
 
 class MainPage(webapp2.RequestHandler):
 	def get(self):
