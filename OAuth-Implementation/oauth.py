@@ -29,18 +29,21 @@ class CallbackHandler(webapp2.RequestHandler):
 		#if state_return != state:
 			
 		
+		headers = {
+			'Content-Type': 'application/x-www-form-urlencoded'
+		}
 		payload = {'grant_type': 'authorization_code',
 		'code': code,
 		'client_id': CLIENT_ID,
 		'client_secret': CLIENT_SECRET,
 		'redirect_uri': REDIRECT_URL}
-		result = urlfetch.fetch(url='https://www.googleapis.com/oauth2/v4/token', payload = json.dumps(payload), method=urlfetch.POST)
+		result = urlfetch.fetch(url='https://www.googleapis.com/oauth2/v4/token', headers=headers, payload=urllib.urlencode(payload), method=urlfetch.POST)
 		self.response.write(repr(result.content))
 		
-		"""auth_key = "Bearer " + result.content['access_token']
+		auth_key = "Bearer " + result.content.access_token
 		
 		payload = {'Authorization': auth_key}
-		response = json.loads(urlfetch.fetch(url='https://www.googleapis.com/plus/v1/people/me', payload = json.dumps(payload), method=urlfetch.GET).content)
+		response = json.loads(urlfetch.fetch(url='https://www.googleapis.com/plus/v1/people/me', headers=headers, payload=urllib.urlencode(payload), method=urlfetch.GET).content)
 		
 		template_values = {
 			'name': response.displayName,
@@ -49,7 +52,7 @@ class CallbackHandler(webapp2.RequestHandler):
 		}
 		
 		template = JINJA_ENVIRONMENT.get_template('callback.html')
-		self.response.write(template.render(template_values))"""
+		self.response.write(template.render(template_values))
 
 class MainPage(webapp2.RequestHandler):
 	def get(self):
