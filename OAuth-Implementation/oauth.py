@@ -48,7 +48,7 @@ class CallbackHandler(webapp2.RequestHandler):
 		r = json.loads(response.content)
 		
 		template_values = {
-			'name': r['displayName,'],
+			'name': r['displayName'],
 			'url': r['url'],
 			'state': state
 		}
