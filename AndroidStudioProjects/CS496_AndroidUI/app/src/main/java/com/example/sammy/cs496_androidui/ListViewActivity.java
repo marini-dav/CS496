@@ -13,7 +13,7 @@ public class ListViewActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity4);
 
         for(int i = 1; i<=5; i++) {
             numbers.add(i);

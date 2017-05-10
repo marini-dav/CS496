@@ -4,7 +4,7 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
+import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -13,38 +13,35 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Button verticalView = (Button) findViewById(R.id.button1);
-        verticalView.setOnClickListener(new View.OnClickListener(){
+        TextView hView = (TextView) findViewById(R.id.textView1);
+        hView.setOnClickListener(new View.OnClickListener(){
            @Override
-            public void onClick(View v) {
-               Intent intent = new Intent(MainActivity.this, VerticalViewActivity.class);
+            public void onClick(View v){
+               Intent intent = new Intent(MainActivity.this, HorizontalViewActivity.class);
                startActivity(intent);
            }
         });
-
-        Button horizontalView = (Button) findViewById(R.id.button2);
-        horizontalView.setOnClickListener(new View.OnClickListener(){
+        TextView vView = (TextView) findViewById(R.id.textView2);
+        vView.setOnClickListener(new View.OnClickListener(){
             @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, HorizontalViewActivity.class);
+            public void onClick(View v){
+                Intent intent = new Intent(MainActivity.this, VerticalViewActivity.class);
                 startActivity(intent);
             }
         });
-
-        Button gridView = (Button) findViewById(R.id.button3);
-        gridView.setOnClickListener(new View.OnClickListener(){
+        TextView gView = (TextView) findViewById(R.id.textView3);
+        gView.setOnClickListener(new View.OnClickListener(){
             @Override
-            public void onClick(View v) {
+            public void onClick(View v){
                 Intent intent = new Intent(MainActivity.this, GridViewActivity.class);
                 startActivity(intent);
             }
         });
-
-        Button relativeView = (Button) findViewById(R.id.button4);
-        relativeView.setOnClickListener(new View.OnClickListener(){
+        TextView rView = (TextView) findViewById(R.id.textView4);
+        rView.setOnClickListener(new View.OnClickListener(){
             @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, ListViewActivity.class);
+            public void onClick(View v){
+                Intent intent = new Intent(MainActivity.this, RelativeViewActivity.class);
                 startActivity(intent);
             }
         });
