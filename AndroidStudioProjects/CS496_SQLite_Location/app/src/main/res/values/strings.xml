@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">CS496_SQLite_Location</string>
+    <string name="add_button">Add</string>
+    <string name="text_box_default">Notes...</string>
+    <string name="view_button">View All</string>
+    <string name="latitude">Latitude</string>
+    <string name="longitude">Longitude</string>
+    <string name="failure">Failure</string>
+    <string name="location_fail">Failed to Obtain Location</string>
+    <string name="ok">OK</string>
+</resources>
