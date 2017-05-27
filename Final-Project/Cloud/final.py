@@ -97,7 +97,7 @@ class PersonHandler(webapp2.RequestHandler):
 				else:
 					self.response.set_status(400)
 			else:
-				self.response.set_status(404
+				self.response.set_status(404)
 		else:
 			self.response.set_status(400)
 	
