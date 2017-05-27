@@ -167,7 +167,7 @@ class WeddingHandler(webapp2.RequestHandler):
 						return
 				else:
 					wedding.person1 = None
-				if 'person2' in wedding_data
+				if 'person2' in wedding_data:
 					if wedding_data['person2']:
 						wedding.person2 = wedding_data['person2']
 					else:
