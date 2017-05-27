@@ -240,8 +240,8 @@ new_allowed_methods = allowed_methods.union(('PATCH',))
 webapp2.WSGIApplication.allowed_methods = new_allowed_methods
 app = webapp2.WSGIApplication([
 	('/', MainPage),
-	('/weddings', weddingHandler),
-	('/weddings/(.*)', weddingHandler),
-	('/people', personHandler),
-	('/people/(.*)', personHandler)
+	('/weddings', WeddingHandler),
+	('/weddings/(.*)', WeddingHandler),
+	('/people', PersonHandler),
+	('/people/(.*)', PersonHandler)
 ], debug=True)
