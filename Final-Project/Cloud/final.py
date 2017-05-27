@@ -14,7 +14,7 @@ class Person(ndb.Model):
 	name = ndb.StringProperty(required=True)
 	parent1 = ndb.StringProperty()
 	parent2 = ndb.StringProperty()
-	age = ndb.IntegeProperty()
+	age = ndb.IntegerProperty()
 
 class PersonHandler(webapp2.RequestHandler):
 	def post(self):
