@@ -34,10 +34,10 @@ class PersonHandler(webapp2.RequestHandler):
 				person_dict = new_person.to_dict()
 				person_dict['self'] = "/people/" + new_person.id
 				self.response.write(json.dumps(person_dict))
-			else
+			else:
 				self.response.set_status(400)
 				return
-		else
+		else:
 			self.response.set_status(400)
 			return
 	
