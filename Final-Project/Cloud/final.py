@@ -205,7 +205,7 @@ class WeddingHandler(webapp2.RequestHandler):
 			if wedding:
 				if 'person1' in wedding_data:
 					wedding.person1 = wedding_data['person1']
-				if 'person2' in wedding_data
+				if 'person2' in wedding_data:
 					wedding.person2 = wedding_data['person2']
 				if 'venue' in wedding_data:
 					wedding.venue = wedding_data['venue']
