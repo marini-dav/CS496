@@ -89,9 +89,6 @@ class PersonHandler(webapp2.RequestHandler):
 						current['self'] = "/people/" + person.id
 						person_array.append(current)
 					self.response.write(json.dumps(person_array))
-					#person_dict = person.to_dict()
-					#person_dict['self'] = "/people/" + person.id
-					#self.response.write(json.dumps(person_dict))
 				else:
 					self.response.set_status(404)
 					return
