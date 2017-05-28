@@ -212,7 +212,7 @@ class WeddingHandler(webapp2.RequestHandler):
 				if 'venue' in wedding_data:
 					new_wedding.movie = wedding_data['venue']
 				new_wedding.put()
-				new_wedding.id = new_slip.key.urlsafe()
+				new_wedding.id = new_wedding.key.urlsafe()
 				new_wedding.put()
 				wedding_dict = new_wedding.to_dict()
 				wedding_dict['self'] = "/weddings/" + new_wedding.id
