@@ -27,7 +27,11 @@ class Person(ndb.Model):
 
 class PersonHandler(webapp2.RequestHandler):
 	def post(self):
-		header_data = self.request.headers['token_id']
+		if 'token_id' in self.requet.headers:
+			header_data = self.request.headers['token_id']
+		else:
+			self.response.set_status(400)
+			return
 		person_data = json.loads(self.request.body)
 		if header_data and 'name' in person_data:
 			if person_data['name']:
@@ -52,7 +56,11 @@ class PersonHandler(webapp2.RequestHandler):
 			return
 	
 	def get(self, id=None):
-		header_data = self.request.headers['token_id']
+		if 'token_id' in self.requet.headers:
+			header_data = self.request.headers['token_id']
+		else:
+			self.response.set_status(400)
+			return
 		if header_data:
 			if id:
 				person = ndb.Key(urlsafe=id).get()
@@ -93,7 +101,11 @@ class PersonHandler(webapp2.RequestHandler):
 	
 	def put(self, id=None):
 		if id:
-			header_data = self.request.headers['token_id']
+			if 'token_id' in self.requet.headers:
+				header_data = self.request.headers['token_id']
+			else:
+				self.response.set_status(400)
+				return
 			person_data = json.loads(self.reques.body)
 			person = ndb.Key(urlsafe=id).get()
 			if person:
@@ -123,7 +135,11 @@ class PersonHandler(webapp2.RequestHandler):
 	
 	def patch(self, id=None):
 		if id:
-			header_data = self.request.headers['token_id']
+			if 'token_id' in self.requet.headers:
+				header_data = self.request.headers['token_id']
+			else:
+				self.response.set_status(400)
+				return
 			person_data = json.loads(self.reques.body)
 			person = ndb.Key(urlsafe=id).get()
 			if person:
@@ -147,7 +163,11 @@ class PersonHandler(webapp2.RequestHandler):
 	
 	def delete(self, id=None):
 		if id:
-			header_data = self.request.headers['token_id']
+			if 'token_id' in self.requet.headers:
+				header_data = self.request.headers['token_id']
+			else:
+				self.response.set_status(400)
+				return
 			person = ndb.Key(urlsafe=id).get()
 			if person:
 				if header_data == person.token_id:
@@ -174,7 +194,11 @@ class PersonHandler(webapp2.RequestHandler):
 
 class WeddingHandler(webapp2.RequestHandler):
 	def post(self):
-		header_data = self.request.headers['token_id']
+		if 'token_id' in self.requet.headers:
+			header_data = self.request.headers['token_id']
+		else:
+			self.response.set_status(400)
+			return
 		wedding_data = json.loads(self.request.body)
 		if header_data:
 			if header_data:
@@ -201,7 +225,11 @@ class WeddingHandler(webapp2.RequestHandler):
 			return
 	
 	def get(self, id=None):
-		header_data = self.request.headers['token_id']
+		if 'token_id' in self.requet.headers:
+			header_data = self.request.headers['token_id']
+		else:
+			self.response.set_status(400)
+			return
 		if header_data:
 			if id:
 				wedding = ndb.Key(urlsafe=id).get()
@@ -231,7 +259,11 @@ class WeddingHandler(webapp2.RequestHandler):
 	
 	def put(self, id=None):
 		if id:
-			header_data = self.request.headers['token_id']
+			if 'token_id' in self.requet.headers:
+				header_data = self.request.headers['token_id']
+			else:
+				self.response.set_status(400)
+				return
 			wedding_data = json.loads(self.request.body)
 			wedding = ndb.Key(urlsafe=id).get()
 			if wedding:
@@ -264,7 +296,11 @@ class WeddingHandler(webapp2.RequestHandler):
 	
 	def patch(self, id=None):
 		if id:
-			header_data = self.request.headers['token_id']
+			if 'token_id' in self.requet.headers:
+				header_data = self.request.headers['token_id']
+			else:
+				self.response.set_status(400)
+				return
 			wedding = ndb.Key(urlsafe=id).get()
 			if wedding:
 				if header_data == wedding.token_id:
@@ -288,7 +324,11 @@ class WeddingHandler(webapp2.RequestHandler):
 	
 	def delete(self, id=None):
 		if id:
-			header_data = self.request.headers['token_id']
+			if 'token_id' in self.requet.headers:
+				header_data = self.request.headers['token_id']
+			else:
+				self.response.set_status(400)
+				return
 			wedding = ndb.Key(urlsafe=id).get()
 			if wedding:
 				if header_data == wedding.token_id:
