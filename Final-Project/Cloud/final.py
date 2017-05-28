@@ -180,6 +180,7 @@ class PersonHandler(webapp2.RequestHandler):
 						query2.put()
 					if query3:
 						query3.spouse = None
+						query3.put()
 					person.key.delete()
 				else:
 					self.response.set_status(403)
