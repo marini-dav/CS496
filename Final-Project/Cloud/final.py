@@ -27,7 +27,7 @@ class Person(ndb.Model):
 
 class PersonHandler(webapp2.RequestHandler):
 	def post(self):
-		if 'token_id' in self.requet.headers:
+		if 'token_id' in self.request.headers:
 			header_data = self.request.headers['token_id']
 		else:
 			self.response.set_status(400)
@@ -56,7 +56,7 @@ class PersonHandler(webapp2.RequestHandler):
 			return
 	
 	def get(self, id=None):
-		if 'token_id' in self.requet.headers:
+		if 'token_id' in self.request.headers:
 			header_data = self.request.headers['token_id']
 		else:
 			self.response.set_status(400)
@@ -101,7 +101,7 @@ class PersonHandler(webapp2.RequestHandler):
 	
 	def put(self, id=None):
 		if id:
-			if 'token_id' in self.requet.headers:
+			if 'token_id' in self.request.headers:
 				header_data = self.request.headers['token_id']
 			else:
 				self.response.set_status(400)
@@ -135,7 +135,7 @@ class PersonHandler(webapp2.RequestHandler):
 	
 	def patch(self, id=None):
 		if id:
-			if 'token_id' in self.requet.headers:
+			if 'token_id' in self.request.headers:
 				header_data = self.request.headers['token_id']
 			else:
 				self.response.set_status(400)
@@ -163,7 +163,7 @@ class PersonHandler(webapp2.RequestHandler):
 	
 	def delete(self, id=None):
 		if id:
-			if 'token_id' in self.requet.headers:
+			if 'token_id' in self.request.headers:
 				header_data = self.request.headers['token_id']
 			else:
 				self.response.set_status(400)
@@ -194,7 +194,7 @@ class PersonHandler(webapp2.RequestHandler):
 
 class WeddingHandler(webapp2.RequestHandler):
 	def post(self):
-		if 'token_id' in self.requet.headers:
+		if 'token_id' in self.request.headers:
 			header_data = self.request.headers['token_id']
 		else:
 			self.response.set_status(400)
@@ -225,7 +225,7 @@ class WeddingHandler(webapp2.RequestHandler):
 			return
 	
 	def get(self, id=None):
-		if 'token_id' in self.requet.headers:
+		if 'token_id' in self.request.headers:
 			header_data = self.request.headers['token_id']
 		else:
 			self.response.set_status(400)
@@ -259,7 +259,7 @@ class WeddingHandler(webapp2.RequestHandler):
 	
 	def put(self, id=None):
 		if id:
-			if 'token_id' in self.requet.headers:
+			if 'token_id' in self.request.headers:
 				header_data = self.request.headers['token_id']
 			else:
 				self.response.set_status(400)
@@ -296,7 +296,7 @@ class WeddingHandler(webapp2.RequestHandler):
 	
 	def patch(self, id=None):
 		if id:
-			if 'token_id' in self.requet.headers:
+			if 'token_id' in self.request.headers:
 				header_data = self.request.headers['token_id']
 			else:
 				self.response.set_status(400)
@@ -324,7 +324,7 @@ class WeddingHandler(webapp2.RequestHandler):
 	
 	def delete(self, id=None):
 		if id:
-			if 'token_id' in self.requet.headers:
+			if 'token_id' in self.request.headers:
 				header_data = self.request.headers['token_id']
 			else:
 				self.response.set_status(400)
