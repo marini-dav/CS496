@@ -106,7 +106,7 @@ class PersonHandler(webapp2.RequestHandler):
 			else:
 				self.response.set_status(400)
 				return
-			person_data = json.loads(self.reques.body)
+			person_data = json.loads(self.request.body)
 			person = ndb.Key(urlsafe=id).get()
 			if person:
 				if header_data == person.token_id:
@@ -140,7 +140,7 @@ class PersonHandler(webapp2.RequestHandler):
 			else:
 				self.response.set_status(400)
 				return
-			person_data = json.loads(self.reques.body)
+			person_data = json.loads(self.request.body)
 			person = ndb.Key(urlsafe=id).get()
 			if person:
 				if header_data == person.token_id:
