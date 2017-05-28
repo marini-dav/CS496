@@ -149,21 +149,25 @@ class WeddingHandler(webapp2.RequestHandler):
 	def post(self):
 		wedding_data = json.loads(self.request.body)
 		if 'token_id' in wedding_data:
-			new_wedding = Wedding(token_id=wedding_data['token_id'],person1=None,person2=None,date=None,venue=None)
-			if 'person1' in wedding_data:
-				new_wedding.person1 = wedding_data['person1']
-			if 'person2' in wedding_data:
-				new_wedding.person1 = wedding_data['person2']
-			if 'date' in wedding_data:
-				new_wedding.date = wedding_data['date']
-			if 'venue' in wedding_data:
-				new_wedding.movie = wedding_data['venue']
-			new_wedding.put()
-			new_wedding.id = new_slip.key.urlsafe()
-			new_wedding.put()
-			wedding_dict = new_wedding.to_dict()
-			wedding_dict['self'] = "/weddings/" + new_wedding.id
-			self.response.write(json.dumps(wedding_dict))
+			if wedding_data['token_id']:
+				new_wedding = Wedding(token_id=wedding_data['token_id'],person1=None,person2=None,date=None,venue=None)
+				if 'person1' in wedding_data:
+					new_wedding.person1 = wedding_data['person1']
+				if 'person2' in wedding_data:
+					new_wedding.person1 = wedding_data['person2']
+				if 'date' in wedding_data:
+					new_wedding.date = wedding_data['date']
+				if 'venue' in wedding_data:
+					new_wedding.movie = wedding_data['venue']
+				new_wedding.put()
+				new_wedding.id = new_slip.key.urlsafe()
+				new_wedding.put()
+				wedding_dict = new_wedding.to_dict()
+				wedding_dict['self'] = "/weddings/" + new_wedding.id
+				self.response.write(json.dumps(wedding_dict))
+			else:
+				self.response.set_status(400)
+				return
 		else:
 			self.response.set_status(400)
 			return
