@@ -31,7 +31,7 @@ class PersonHandler(webapp2.RequestHandler):
 		person_data = json.loads(self.request.body)
 		if header_data and 'name' in person_data:
 			if person_data['name']:
-				new_person = Person(token_id=header_data,name=person_data['name'],spouse=None,hometown=None,age=None)
+				new_person = Person(token_id=str(header_data),name=person_data['name'],spouse=None,hometown=None,age=None)
 				if 'spouse' in person_data:
 					new_person.spouse = person_data['spouse']
 				if 'hometown' in person_data:
