@@ -299,7 +299,7 @@ class WeddingHandler(webapp2.RequestHandler):
 			else:
 				self.response.set_status(400)
 				return
-			edding_data = json.loads(self.request.body)
+			wedding_data = json.loads(self.request.body)
 			wedding = ndb.Key(urlsafe=id).get()
 			if wedding:
 				if header_data == wedding.token_id:
