@@ -153,12 +153,15 @@ class PersonHandler(webapp2.RequestHandler):
 				if header_data['token_id'] == person.token_id:
 					query1 = Wedding.query(Wedding.person1 == id).get()
 					query2 = Wedding.query(Wedding.person2 == id).get()
+					query3 = Person.query(Person.spouse == id).get()
 					if query1:
 						query1.person1 = None
 						query1.put()
 					if query2:
 						query2.person2 = None
 						query2.put()
+					if query3:
+						query3.spouse = None
 					person.key.delete()
 				else:
 					self.response.set_status(403)
