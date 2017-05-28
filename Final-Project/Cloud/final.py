@@ -1,9 +1,17 @@
+import os
 from google.appengine.ext import ndb
 import webapp2
 import json
+import jinja2
+
+JINJA_ENVIRONMENT = jinja2.Environment(
+    loader=jinja2.FileSystemLoader(os.path.dirname(__file__)),
+    extensions=['jinja2.ext.autoescape'],
+    autoescape=True)
 
 class Wedding(ndb.Model):
 	id = ndb.StringProperty()
+	token_id = ndb.StringProperty(required=True)
 	person1 = ndb.StringProperty()
 	person2 = ndb.StringProperty()
 	date = ndb.StringProperty()
@@ -11,6 +19,7 @@ class Wedding(ndb.Model):
 
 class Person(ndb.Model):
 	id = ndb.StringProperty()
+	token_id = ndb.StringProperty(required=True)
 	name = ndb.StringProperty(required=True)
 	parent1 = ndb.StringProperty()
 	parent2 = ndb.StringProperty()
@@ -19,9 +28,9 @@ class Person(ndb.Model):
 class PersonHandler(webapp2.RequestHandler):
 	def post(self):
 		person_data = json.loads(self.reques.body)
-		if 'name' in person_data:
-			if person_data['name']:
-				new_person = Person(name=person_data['name'],parent1=None,parent2=None,age=None)
+		if 'token_id' in person_data and 'name' in person_data:
+			if person_data['token_id'] and person_data['name']:
+				new_person = Person(token_id=person_data['token_id'],name=person_data['name'],parent1=None,parent2=None,age=None)
 				if 'parent1' in person_data:
 					new_person.parent1 = person_data['parent1']
 				if 'parent2' in person_data:
@@ -124,8 +133,12 @@ class PersonHandler(webapp2.RequestHandler):
 class WeddingHandler(webapp2.RequestHandler):
 	def post(self):
 		wedding_data = json.loads(self.request.body)
-		if 'person1' in wedding_data or 'person2' in wedding_data:
-			new_wedding = Wedding(person1=wedding_data['person1'],person2=wedding_data['person2'],date=None,venue=None)
+		if 'token_id' in wedding_data:
+			new_wedding = Wedding(token_id=wedding_data['token_id'],person1=None,person2=None,date=None,venue=None)
+			if 'person1' in wedding_data:
+				new_wedding.person1 = wedding_data['person1']
+			if 'person2' in wedding_data:
+				new_wedding.person1 = wedding_data['person2']
 			if 'date' in wedding_data:
 				new_wedding.date = wedding_data['date']
 			if 'venue' in wedding_data:
@@ -233,7 +246,9 @@ class WeddingHandler(webapp2.RequestHandler):
 
 class MainPage(webapp2.RequestHandler):
 	def get(self):
-		self.response.write("Sammy Pettinichi's CS496 Final Project")
+		template = JINJA_ENVIRONMENT.get_template('index.html')
+		self.response.write(template.render())
+		#self.response.write("Sammy Pettinichi's CS496 Final Project")
 
 allowed_methods = webapp2.WSGIApplication.allowed_methods
 new_allowed_methods = allowed_methods.union(('PATCH',))
