@@ -152,8 +152,6 @@ class PersonHandler(webapp2.RequestHandler):
 						person.hometown = person_data['hometown']
 					if 'age' in person_data:
 						person.age = person_data['age']
-					else:
-						self.response.set_status(400)
 				else:
 					self.response.set_status(403)
 			else:
@@ -301,6 +299,7 @@ class WeddingHandler(webapp2.RequestHandler):
 			else:
 				self.response.set_status(400)
 				return
+			edding_data = json.loads(self.request.body)
 			wedding = ndb.Key(urlsafe=id).get()
 			if wedding:
 				if header_data == wedding.token_id:
