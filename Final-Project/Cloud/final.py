@@ -1,13 +1,39 @@
+CLIENT_ID = '367748320634-vdkilqrod6apumrmfpnb11esmvbc09te.apps.googleusercontent.com'
+
 import os
 from google.appengine.ext import ndb
+from oauth2client import client, crypt
 import webapp2
 import json
 import jinja2
 
 JINJA_ENVIRONMENT = jinja2.Environment(
-    loader=jinja2.FileSystemLoader(os.path.dirname(__file__)),
-    extensions=['jinja2.ext.autoescape'],
-    autoescape=True)
+	loader=jinja2.FileSystemLoader(os.path.dirname(__file__)),
+	extensions=['jinja2.ext.autoescape'],
+	autoescape=True)
+
+def getParentKey(userid):
+	if userid is not None:
+		parent_key = ndb.Key(Wedding, repr(userid))
+		return parent_key
+	else:
+		return None
+	people = Person.query(ancestor=parent_key).fetch()
+
+def parseToken(token):
+	if token is not None:
+		try:
+			idinfo = client.verify_id_token(token, None)
+			if idinfo['iss'] not in ['accounts.google.com', 'https://accounts.google.com']:
+				raise crypt.AppIdentityError("Wrong issuer.")
+			if idinfo['aud'] not in [CLIENT_ID]:
+				raise crypt.AppIdentityError("Unrecognized client.")
+			userid = idinfo['sub']
+			return userid
+		except crypt.AppIdentityError:
+			return None
+	else:
+		return None
 
 class Wedding(ndb.Model):
 	id = ndb.StringProperty()
