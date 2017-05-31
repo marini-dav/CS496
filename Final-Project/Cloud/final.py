@@ -128,7 +128,7 @@ class PersonHandler(webapp2.RequestHandler):
 				self.response.set_status(400)
 				return
 		else:
-			self.response.write(token + " : " + header_data)
+			self.response.write(token + " : " + str(header_data))
 			self.response.set_status(400)
 			return
 	
