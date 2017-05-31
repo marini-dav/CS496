@@ -77,7 +77,6 @@ def getParentKey(userid):
 		return parent_key
 	else:
 		return None
-	people = Person.query(ancestor=parent_key).fetch()
 
 def parseToken(token):
 	if token is not None:
@@ -113,14 +112,14 @@ class Person(ndb.Model):
 class PersonHandler(webapp2.RequestHandler):
 	def post(self):
 		if 'token_id' in self.request.headers:
-			header_data = self.request.headers['token_id']
+			header_data = parseToken(self.request.headers['token_id'])
 		else:
 			self.response.set_status(400)
 			return
 		person_data = json.loads(self.request.body)
 		if header_data and 'name' in person_data:
 			if person_data['name']:
-				new_person = Person(token_id=header_data,name=person_data['name'],spouse=None,hometown=None,age=None)
+				new_person = Person(parent=getParentKey(header_data),token_id=header_data,name=person_data['name'],spouse=None,hometown=None,age=None)
 				if 'spouse' in person_data:
 					new_person.spouse = person_data['spouse']
 				if 'hometown' in person_data:
@@ -142,7 +141,7 @@ class PersonHandler(webapp2.RequestHandler):
 	
 	def get(self, id=None):
 		if 'token_id' in self.request.headers:
-			header_data = self.request.headers['token_id']
+			header_data = parseToken(self.request.headers['token_id'])
 		else:
 			self.response.set_status(400)
 			return
@@ -161,10 +160,11 @@ class PersonHandler(webapp2.RequestHandler):
 					self.response.set_status(404)
 					return
 			else:
-				query = Person.query(Person.token_id == header_data).fetch()
-				if query:
+				parent_key = getParentKey(header_data)
+				people = Person.query(ancestor=parent_key).fetch()
+				if people:
 					person_array = []
-					for person in query:
+					for person in people:
 						current = {}
 						current['id'] = person.id
 						current['name'] = person.name
@@ -184,7 +184,7 @@ class PersonHandler(webapp2.RequestHandler):
 	def put(self, id=None):
 		if id:
 			if 'token_id' in self.request.headers:
-				header_data = self.request.headers['token_id']
+				header_data = parseToken(self.request.headers['token_id'])
 			else:
 				self.response.set_status(400)
 				return
@@ -218,7 +218,7 @@ class PersonHandler(webapp2.RequestHandler):
 	def patch(self, id=None):
 		if id:
 			if 'token_id' in self.request.headers:
-				header_data = self.request.headers['token_id']
+				header_data = parseToken(self.request.headers['token_id'])
 			else:
 				self.response.set_status(400)
 				return
@@ -244,7 +244,7 @@ class PersonHandler(webapp2.RequestHandler):
 	def delete(self, id=None):
 		if id:
 			if 'token_id' in self.request.headers:
-				header_data = self.request.headers['token_id']
+				header_data = parseToken(self.request.headers['token_id'])
 			else:
 				self.response.set_status(400)
 				return
@@ -276,14 +276,14 @@ class PersonHandler(webapp2.RequestHandler):
 class WeddingHandler(webapp2.RequestHandler):
 	def post(self):
 		if 'token_id' in self.request.headers:
-			header_data = self.request.headers['token_id']
+			header_data = parseToken(self.request.headers['token_id'])
 		else:
 			self.response.set_status(400)
 			return
 		wedding_data = json.loads(self.request.body)
 		if header_data:
 			if header_data:
-				new_wedding = Wedding(token_id=header_data,person1=None,person2=None,date=None,venue=None)
+				new_wedding = Wedding(parent=getParentKey(header_data),token_id=header_data,person1=None,person2=None,date=None,venue=None)
 				if 'person1' in wedding_data:
 					new_wedding.person1 = wedding_data['person1']
 				if 'person2' in wedding_data:
@@ -307,7 +307,7 @@ class WeddingHandler(webapp2.RequestHandler):
 	
 	def get(self, id=None):
 		if 'token_id' in self.request.headers:
-			header_data = self.request.headers['token_id']
+			header_data = parseToken(self.request.headers['token_id'])
 		else:
 			self.response.set_status(400)
 			return
@@ -326,7 +326,8 @@ class WeddingHandler(webapp2.RequestHandler):
 					self.response.set_status(404)
 					return
 			else:
-				wedding = Wedding.query(Wedding.token_id == header_data).get()
+				parent_key = getParentKey(header_data)
+				wedding = Wedding.query(ancestor=parent_key).fetch()
 				if wedding:
 					wedding_dict = wedding.to_dict()
 					wedding_dict['self'] = "/weddings/" + id
@@ -341,7 +342,7 @@ class WeddingHandler(webapp2.RequestHandler):
 	def put(self, id=None):
 		if id:
 			if 'token_id' in self.request.headers:
-				header_data = self.request.headers['token_id']
+				header_data = parseToken(self.request.headers['token_id'])
 			else:
 				self.response.set_status(400)
 				return
@@ -378,7 +379,7 @@ class WeddingHandler(webapp2.RequestHandler):
 	def patch(self, id=None):
 		if id:
 			if 'token_id' in self.request.headers:
-				header_data = self.request.headers['token_id']
+				header_data = parseToken(self.request.headers['token_id'])
 			else:
 				self.response.set_status(400)
 				return
@@ -407,7 +408,7 @@ class WeddingHandler(webapp2.RequestHandler):
 	def delete(self, id=None):
 		if id:
 			if 'token_id' in self.request.headers:
-				header_data = self.request.headers['token_id']
+				header_data = parseToken(self.request.headers['token_id'])
 			else:
 				self.response.set_status(400)
 				return
