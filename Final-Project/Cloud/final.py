@@ -283,7 +283,7 @@ class WeddingHandler(webapp2.RequestHandler):
 				if 'date' in wedding_data:
 					new_wedding.date = wedding_data['date']
 				if 'venue' in wedding_data:
-					new_wedding.movie = wedding_data['venue']
+					new_wedding.venue = wedding_data['venue']
 				new_wedding.put()
 				new_wedding.id = new_wedding.key.urlsafe()
 				new_wedding.put()
