@@ -69,23 +69,18 @@ def getParentKey(userid):
 		return None
 
 def parseToken(token):
-	logging.debug(token)
 	if token is not None:
 		try:
 			idinfo = client.verify_id_token(token, None)
-			logging.debug(idinfo)
 			if idinfo['iss'] not in ['accounts.google.com', 'https://accounts.google.com']:
 				raise crypt.AppIdentityError("Wrong issuer.")
 			if idinfo['aud'] not in [CLIENT_ID]:
 				raise crypt.AppIdentityError("Unrecognized client.")
 			userid = idinfo['sub']
-			logging.debug(userid)
 			return userid
 		except crypt.AppIdentityError:
-			logging.debug("AppIdentityError")
 			return None
 	else:
-		logging.debug("token is None")
 		return None
 
 class Wedding(ndb.Model):
@@ -132,7 +127,6 @@ class PersonHandler(webapp2.RequestHandler):
 				self.response.set_status(400)
 				return
 		else:
-			self.response.write(token + " : " + str(header_data))
 			self.response.set_status(400)
 			return
 	
