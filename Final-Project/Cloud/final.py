@@ -127,7 +127,7 @@ class PersonHandler(webapp2.RequestHandler):
 				self.response.set_status(400)
 				return
 		else:
-			self.response.set_status(400)
+			self.response.set_status(418)
 			return
 	
 	def get(self, id=None):
