@@ -51,17 +51,11 @@ class CallbackHandler(webapp2.RequestHandler):
 		result = urlfetch.fetch(url='https://www.googleapis.com/oauth2/v4/token', headers=headers, payload=urllib.urlencode(payload), method=urlfetch.POST)
 		r = json.loads(result.content)
 		
-		auth_key = "Bearer " + r['access_token']
-		
-		headers = {
-			'Authorization': auth_key
-		}
-		response = urlfetch.fetch(url='https://www.googleapis.com/plus/v1/people/me', headers=headers, method=urlfetch.GET)
-		r = json.loads(response.content)
-		r_name = r['name']
+		token = r['access_token']
+		auth_key = "Bearer " + token
 		
 		template_values = {
-			'token_info': r['access_token'],
+			'token_info': token,
 			'auth_info': auth_key
 		}
 		
