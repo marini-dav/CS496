@@ -103,7 +103,8 @@ class Person(ndb.Model):
 class PersonHandler(webapp2.RequestHandler):
 	def post(self):
 		if 'token_id' in self.request.headers:
-			header_data = parseToken(self.request.headers['token_id'])
+			token = self.request.headers['token_id']
+			header_data = parseToken(token)
 		else:
 			self.response.set_status(403)
 			return
@@ -127,7 +128,7 @@ class PersonHandler(webapp2.RequestHandler):
 				self.response.set_status(400)
 				return
 		else:
-			self.response.write(header_data)
+			self.response.write(token + " : " + header_data)
 			self.response.set_status(400)
 			return
 	
