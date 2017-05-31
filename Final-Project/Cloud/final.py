@@ -15,6 +15,7 @@ import json
 import jinja2
 import string
 import random
+import logging
 
 JINJA_ENVIRONMENT = jinja2.Environment(
 	loader=jinja2.FileSystemLoader(os.path.dirname(__file__)),
@@ -70,14 +71,17 @@ def getParentKey(userid):
 		return None
 
 def parseToken(token):
+	logging.debug(token)
 	if token is not None:
 		try:
 			idinfo = client.verify_id_token(token, None)
+			logging.debug(idinfo)
 			if idinfo['iss'] not in ['accounts.google.com', 'https://accounts.google.com']:
 				raise crypt.AppIdentityError("Wrong issuer.")
 			if idinfo['aud'] not in [CLIENT_ID]:
 				raise crypt.AppIdentityError("Unrecognized client.")
 			userid = idinfo['sub']
+			logging.debug(userid)
 			return userid
 		except crypt.AppIdentityError:
 			return None
