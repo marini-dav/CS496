@@ -61,11 +61,8 @@ class CallbackHandler(webapp2.RequestHandler):
 		r_name = r['name']
 		
 		template_values = {
-			'displayName': r['displayName'],
-			'familyName': r_name['familyName'],
-			'givenName': r_name['givenName'],
-			'url': r['url'],
-			'state': state_return
+			'token_info': r['access_token'],
+			'auth_info': auth_key
 		}
 		
 		template = JINJA_ENVIRONMENT.get_template('callback.html')
