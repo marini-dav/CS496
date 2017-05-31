@@ -52,12 +52,10 @@ class CallbackHandler(webapp2.RequestHandler):
 		result = urlfetch.fetch(url='https://www.googleapis.com/oauth2/v4/token', headers=headers, payload=urllib.urlencode(payload), method=urlfetch.POST)
 		r = json.loads(result.content)
 		
-		token = r['access_token']
-		auth_key = "Bearer " + token
+		token = r['id_token']
 		
 		template_values = {
-			'token_info': token,
-			'auth_info': auth_key
+			'token_info': token
 		}
 		
 		template = JINJA_ENVIRONMENT.get_template('callback.html')
