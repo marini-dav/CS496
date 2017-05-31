@@ -273,7 +273,8 @@ class PersonHandler(webapp2.RequestHandler):
 class WeddingHandler(webapp2.RequestHandler):
 	def post(self):
 		if 'token_id' in self.request.headers:
-			header_data = parseToken(self.request.headers['token_id'])
+			token = self.request.headers['token_id']
+			header_data = parseToken(token)
 		else:
 			self.response.set_status(403)
 			return
