@@ -84,8 +84,10 @@ def parseToken(token):
 			logging.debug(userid)
 			return userid
 		except crypt.AppIdentityError:
+			logging.debug("AppIdentityError")
 			return None
 	else:
+		logging.debug("token is None")
 		return None
 
 class Wedding(ndb.Model):
