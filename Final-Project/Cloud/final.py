@@ -105,7 +105,7 @@ class PersonHandler(webapp2.RequestHandler):
 		if 'token_id' in self.request.headers:
 			header_data = parseToken(self.request.headers['token_id'])
 		else:
-			self.response.set_status(400)
+			self.response.set_status(403)
 			return
 		person_data = json.loads(self.request.body)
 		if header_data and 'name' in person_data:
@@ -269,7 +269,7 @@ class WeddingHandler(webapp2.RequestHandler):
 		if 'token_id' in self.request.headers:
 			header_data = parseToken(self.request.headers['token_id'])
 		else:
-			self.response.set_status(400)
+			self.response.set_status(403)
 			return
 		wedding_data = json.loads(self.request.body)
 		if header_data:
