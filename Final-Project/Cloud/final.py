@@ -197,6 +197,7 @@ class PersonHandler(webapp2.RequestHandler):
 							person.age = person_data['age']
 						else:
 							person.age = None
+						person.put()
 					else:
 						self.response.set_status(400)
 				else:
@@ -225,6 +226,7 @@ class PersonHandler(webapp2.RequestHandler):
 						person.hometown = person_data['hometown']
 					if 'age' in person_data:
 						person.age = person_data['age']
+					person.put()
 				else:
 					self.response.set_status(403)
 			else:
