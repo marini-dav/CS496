@@ -1,0 +1,1067 @@
+{
+	"variables": [],
+	"info": {
+		"name": "CS496 Final",
+		"_postman_id": "7805bfae-597f-01d4-53d9-cd4ff00adc6f",
+		"description": "",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Add Invalid Person",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"post with no token: code 403\"] = responseCode.code === 403;"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "{{URL}}/people",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"name\":\"Steve\",\n\t\"spouse\":\"{{u1p1}}\",\n\t\"hometown\":\"Savannah\",\n\t\"age\":24\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Add User1Person1",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"User1Person1 added: code 200\"] = responseCode.code === 200;",
+							"",
+							"body = JSON.parse(responseBody);",
+							"postman.setEnvironmentVariable(\"u1p1\",body.id);",
+							"",
+							"tests[\"verify name\"] = body.name === \"Adam\";",
+							"tests[\"verify hometown\"] = body.hometown === \"Atlanta\";",
+							"tests[\"verify age\"] = body.age === 23;"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "{{URL}}/people",
+				"method": "POST",
+				"header": [
+					{
+						"key": "token_id",
+						"value": "{{token1}}",
+						"description": ""
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"name\":\"Adam\",\n\t\"hometown\":\"Atlanta\",\n\t\"age\":23\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Add User1Person2",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"User1Person2 added: code 200\"] = responseCode.code === 200;",
+							"",
+							"body = JSON.parse(responseBody);",
+							"postman.setEnvironmentVariable(\"u1p2\",body.id);",
+							"",
+							"tests[\"verify name\"] = body.name === \"Steve\";",
+							"tests[\"verify hometown\"] = body.hometown === \"Savannah\";",
+							"tests[\"verify spouse\"] = body.spouse === environment.u1p1;",
+							"tests[\"verify age\"] = body.age === 24;"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "{{URL}}/people",
+				"method": "POST",
+				"header": [
+					{
+						"key": "token_id",
+						"value": "{{token1}}",
+						"description": ""
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"name\":\"Steve\",\n\t\"spouse\":\"{{u1p1}}\",\n\t\"hometown\":\"Savannah\",\n\t\"age\":24\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Add Spouse to User1 Person1",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"add user1person1 spouse: code 200\"] = responseCode.code === 200;"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "{{URL}}/people/{{u1p1}}",
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "token_id",
+						"value": "{{token1}}",
+						"description": ""
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"spouse\":\"{{u1p2}}\"\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Get User1 Both People",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"returned both people: code 200\"] = responseCode.code === 200;",
+							"",
+							"body = JSON.parse(responseBody);",
+							"",
+							"tests[\"containts user1person1\"] = responseBody.has(environment.u1p1);",
+							"tests[\"containts user1person2\"] = responseBody.has(environment.u1p2);"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "{{URL}}/people",
+				"method": "GET",
+				"header": [
+					{
+						"key": "token_id",
+						"value": "{{token1}}",
+						"description": ""
+					}
+				],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Get User1 Person1",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"returned both people: code 200\"] = responseCode.code === 200;",
+							"",
+							"body = JSON.parse(responseBody);",
+							"",
+							"tests[\"returned user1 person1\"] = body.id === environment.u1p1;",
+							"tests[\"user1 person1 name\"] = body.name === \"Adam\";",
+							"tests[\"user1 person1 hometown\"] = body.hometown === \"Atlanta\";",
+							"tests[\"verify spouse\"] = body.spouse === environment.u1p2;",
+							"tests[\"user1 person1 age\"] = body.age === 23;"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "{{URL}}/people/{{u1p1}}",
+				"method": "GET",
+				"header": [
+					{
+						"key": "token_id",
+						"value": "{{token1}}",
+						"description": ""
+					}
+				],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Add User2Person1",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"User2Person1 added: code 200\"] = responseCode.code === 200;",
+							"",
+							"body = JSON.parse(responseBody);",
+							"postman.setEnvironmentVariable(\"u2p1\",body.id);",
+							"",
+							"tests[\"verify name\"] = body.name === \"Elaine\";",
+							"tests[\"verify hometown\"] = body.hometown === \"Boston\";",
+							"tests[\"verify age\"] = body.age === 21;"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "{{URL}}/people",
+				"method": "POST",
+				"header": [
+					{
+						"key": "token_id",
+						"value": "{{token2}}",
+						"description": ""
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"name\":\"Elaine\",\n\t\"hometown\":\"Boston\",\n\t\"age\":21\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Add User2Person2",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"User2Person2 added: code 200\"] = responseCode.code === 200;",
+							"",
+							"body = JSON.parse(responseBody);",
+							"postman.setEnvironmentVariable(\"u2p2\",body.id);",
+							"",
+							"tests[\"verify name\"] = body.name === \"Sarah\";",
+							"tests[\"verify hometown\"] = body.hometown === \"Philadelphia\";",
+							"tests[\"verify spouse\"] = body.spouse === environment.u2p1;",
+							"tests[\"verify age\"] = body.age === 22;"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "{{URL}}/people",
+				"method": "POST",
+				"header": [
+					{
+						"key": "token_id",
+						"value": "{{token2}}",
+						"description": ""
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"name\":\"Sarah\",\n\t\"spouse\":\"{{u2p1}}\",\n\t\"hometown\":\"Philadelphia\",\n\t\"age\":22\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Add Spouse to User2 Person1",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"add user2person1 spouse: code 200\"] = responseCode.code === 200;"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "{{URL}}/people/{{u2p1}}",
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "token_id",
+						"value": "{{token2}}",
+						"description": ""
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"spouse\":\"{{u2p2}}\"\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Get User2 Both People",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"returned both people: code 200\"] = responseCode.code === 200;",
+							"",
+							"body = JSON.parse(responseBody);",
+							"",
+							"tests[\"containts user2person1\"] = responseBody.has(environment.u2p1);",
+							"tests[\"containts user2person2\"] = responseBody.has(environment.u2p2);"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "{{URL}}/people",
+				"method": "GET",
+				"header": [
+					{
+						"key": "token_id",
+						"value": "{{token2}}",
+						"description": ""
+					}
+				],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Get User2 Person1",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"returned both people: code 200\"] = responseCode.code === 200;",
+							"",
+							"body = JSON.parse(responseBody);",
+							"",
+							"tests[\"returned user2 person1\"] = body.id === environment.u2p1;",
+							"tests[\"user1 person1 name\"] = body.name === \"Elaine\";",
+							"tests[\"user1 person1 hometown\"] = body.hometown === \"Boston\";",
+							"tests[\"verify spouse\"] = body.spouse === environment.u2p2;",
+							"tests[\"user1 person1 age\"] = body.age === 21;"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "{{URL}}/people/{{u2p1}}",
+				"method": "GET",
+				"header": [
+					{
+						"key": "token_id",
+						"value": "{{token2}}",
+						"description": ""
+					}
+				],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Add Invalid Wedding",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"post with no token: code 403\"] = responseCode.code === 403;"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "{{URL}}/weddings",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"person1\":\"{{u1p1}}\",\n\t\"person2\":\"{{u1p2}}\",\n\t\"age\":\"5 November 2017\",\n\t\"venue\":\"Atlanta Convention Center\"\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Add User1 Wedding",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"add user1 wedding: code 200\"] = responseCode.code === 200;",
+							"",
+							"body = JSON.parse(responseBody);",
+							"postman.setEnvironmentVariable(\"u1wedding\",body.id);",
+							"",
+							"tests[\"verify wedding date\"] = body.date === \"5 November 2017\";",
+							"tests[\"verify wedding venue\" + body.venue] = body.venue === \"Atlanta Convention Center\";"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "{{URL}}/weddings",
+				"method": "POST",
+				"header": [
+					{
+						"key": "token_id",
+						"value": "{{token1}}",
+						"description": ""
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"person1\":\"{{u1p1}}\",\n\t\"person2\":\"{{u1p2}}\",\n\t\"date\":\"5 November 2017\",\n\t\"venue\":\"Atlanta Convention Center\"\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Add User2 Wedding",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"add user2 wedding: code 200\"] = responseCode.code === 200;",
+							"",
+							"body = JSON.parse(responseBody);",
+							"postman.setEnvironmentVariable(\"u2wedding\",body.id);",
+							"",
+							"tests[\"verify wedding date\"] = body.date === \"1 May 2018\";",
+							"tests[\"verify wedding venue\" + body.venue] = body.venue === \"Boston Convention Center\";"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "{{URL}}/weddings",
+				"method": "POST",
+				"header": [
+					{
+						"key": "token_id",
+						"value": "{{token2}}",
+						"description": ""
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"person1\":\"{{u2p1}}\",\n\t\"person2\":\"{{u2p2}}\",\n\t\"date\":\"1 May 2018\",\n\t\"venue\":\"Boston Convention Center\"\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Access Invalid Wedding",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"attempt to access another user's wedding: code 403\"] = responseCode.code === 403;"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "{{URL}}/weddings/{{u2wedding}}",
+				"method": "GET",
+				"header": [
+					{
+						"key": "token_id",
+						"value": "{{token1}}",
+						"description": ""
+					}
+				],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Access Invalid Person",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"attempt to access another user's person: code 403\"] = responseCode.code === 403;"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "{{URL}}/people/{{u2p1}}",
+				"method": "GET",
+				"header": [
+					{
+						"key": "token_id",
+						"value": "{{token1}}",
+						"description": ""
+					}
+				],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Get User2 Wedding",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"get wedding: code 200\"] = responseCode.code === 200;",
+							"",
+							"body = JSON.parse(responseBody);",
+							"",
+							"tests[\"returned user2's wedding\"] = body.id === environment.u2wedding;",
+							"tests[\"verify wedding date\"] = body.date === \"1 May 2018\";",
+							"tests[\"verify wedding venue\"] = body.venue === \"Boston Convention Center\";"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "{{URL}}/weddings/{{u2wedding}}",
+				"method": "GET",
+				"header": [
+					{
+						"key": "token_id",
+						"value": "{{token2}}",
+						"description": ""
+					}
+				],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Change User2 Wedding Venue",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"get wedding: code 200\"] = responseCode.code === 200;"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "{{URL}}/weddings/{{u2wedding}}",
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "token_id",
+						"value": "{{token2}}",
+						"description": ""
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"person1\":\"{{u2p1}}\",\n\t\"person2\":\"{{u2p2}}\",\n\t\"date\":\"1 May 2018\",\n\t\"venue\":\"St. Patrick's Cathedral\"\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Get User2 Wedding",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"get wedding: code 200\"] = responseCode.code === 200;",
+							"",
+							"body = JSON.parse(responseBody);",
+							"",
+							"tests[\"returned user2's wedding\"] = body.id === environment.u2wedding;",
+							"tests[\"verify wedding date\"] = body.date === \"1 May 2018\";",
+							"tests[\"venue changed\"] = body.venue === \"St. Patrick's Cathedral\";"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "{{URL}}/weddings/{{u2wedding}}",
+				"method": "GET",
+				"header": [
+					{
+						"key": "token_id",
+						"value": "{{token2}}",
+						"description": ""
+					}
+				],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Change User1 Wedding Venue",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"get wedding: code 200\"] = responseCode.code === 200;"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "{{URL}}/weddings/{{u1wedding}}",
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "token_id",
+						"value": "{{token1}}",
+						"description": ""
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"person1\":\"{{u1p1}}\",\n\t\"person2\":\"{{u1p2}}\",\n\t\"date\":\"5 November 2017\",\n\t\"venue\":\"Savannah Convention Center\"\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Get User1 Wedding",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"get wedding: code 200\"] = responseCode.code === 200;",
+							"",
+							"body = JSON.parse(responseBody);",
+							"",
+							"tests[\"returned user2's wedding\"] = body.id === environment.u1wedding;",
+							"tests[\"verify wedding date\"] = body.date === \"5 November 2017\";",
+							"tests[\"venue changed\"] = body.venue === \"Savannah Convention Center\";"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "{{URL}}/weddings/{{u1wedding}}",
+				"method": "GET",
+				"header": [
+					{
+						"key": "token_id",
+						"value": "{{token1}}",
+						"description": ""
+					}
+				],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Delete User1 Person1",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"delete user1 person1: code 200\"] = responseCode.code === 200;",
+							"",
+							"tests[\"Content-Type is present\"] = postman.getResponseHeader(\"Content-Type\");"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "{{URL}}/people/{{u1p1}}",
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "token_id",
+						"value": "{{token1}}",
+						"description": ""
+					}
+				],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Verify User1 Person1 Deleted",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"user1 person1 not found: code 404\"] = responseCode.code === 404;"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "{{URL}}/people/{{u1p1}}",
+				"method": "GET",
+				"header": [
+					{
+						"key": "token_id",
+						"value": "{{token1}}",
+						"description": ""
+					}
+				],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "User1 Person2 Spouse Removed",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"get user1 person2: code 200\"] = responseCode.code === 200;",
+							"",
+							"body = JSON.parse(responseBody);",
+							"",
+							"tests[\"user1 person1 removed as spouse\"] = body.spouse === null;",
+							"tests[\"verify name\"] = body.name === \"Steve\";",
+							"tests[\"verify hometown\"] = body.hometown === \"Savannah\";",
+							"tests[\"verify age\"] = body.age === 24;"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "{{URL}}/people/{{u1p2}}",
+				"method": "GET",
+				"header": [
+					{
+						"key": "token_id",
+						"value": "{{token1}}",
+						"description": ""
+					}
+				],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "User1 Wedding Person1 Removed",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"get user1 wedding: code 200\"] = responseCode.code === 200;",
+							"",
+							"body = JSON.parse(responseBody);",
+							"",
+							"tests[\"user1 person1 removed as spouse\"] = body.person1 === null;",
+							"tests[\"user1 person2 still a spouse\"] = body.person2 === environment.u1p2;"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "{{URL}}/weddings/{{u1wedding}}",
+				"method": "GET",
+				"header": [
+					{
+						"key": "token_id",
+						"value": "{{token1}}",
+						"description": ""
+					}
+				],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Delete User2 Wedding",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"wedding2 deleted: code 200\"] = responseCode.code === 200;"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "{{URL}}/weddings/{{u2wedding}}",
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "token_id",
+						"value": "{{token2}}",
+						"description": ""
+					}
+				],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Verify User2 Wedding Deleted",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Verify weddin2 deleted: code 404\"] = responseCode.code === 404;"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "{{URL}}/weddings/{{u2wedding}}",
+				"method": "GET",
+				"header": [
+					{
+						"key": "token_id",
+						"value": "{{token2}}",
+						"description": ""
+					}
+				],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Delete User1 Person2",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"user1 person2 deleted: code 200\"] = responseCode.code === 200;"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "{{URL}}/people/{{u1p2}}",
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "token_id",
+						"value": "{{token1}}",
+						"description": ""
+					}
+				],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Delete User1 Wedding",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"user1 wedding deleted: code 200\"] = responseCode.code === 200;"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "{{URL}}/weddings/{{u1wedding}}",
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "token_id",
+						"value": "{{token1}}",
+						"description": ""
+					}
+				],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Delete User2 Person1",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"delete user2 person1: code 200\"] = responseCode.code === 200;",
+							"",
+							"tests[\"Content-Type is present\"] = postman.getResponseHeader(\"Content-Type\");"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "{{URL}}/people/{{u2p1}}",
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "token_id",
+						"value": "{{token2}}",
+						"description": ""
+					}
+				],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Delete User2 Person2",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"user2 person2 deleted: code 200\"] = responseCode.code === 200;"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "{{URL}}/people/{{u2p2}}",
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "token_id",
+						"value": "{{token2}}",
+						"description": ""
+					}
+				],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		}
+	]
+}
